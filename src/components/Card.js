@@ -1,55 +1,31 @@
 import styled from 'styled-components';
-import { ReactComponent as Male } from '../assets/genders/male.svg';
-import { ReactComponent as Female } from '../assets/genders/female.svg';
-import { ReactComponent as Genderless } from '../assets/genders/genderless.svg';
 
-// TODO: Refactor the Card component
-export function Card({
-  status,
-  name,
-  species,
-  type,
-  gender,
-  image,
-  onClickHandler
-}) {
+import { useCallback } from 'react';
+import { genderIcons } from '../shared/helpers/genders';
+
+export function Card({ character, onClickHandler }) {
+  const { status, name, species, type, gender, image } = character;
+
+  const handleClick = useCallback(() => {
+    onClickHandler(character);
+  }, [character, onClickHandler]);
+
   return (
-    <StyledCard onClick={onClickHandler}>
+    <StyledCard onClick={handleClick}>
       <CardImg src={image} alt={name} />
-
       <CardInfo>
-        <CardTitle name={name} gender={gender} />
-
+        <CardTitle name={name} icon={genderIcons[gender] || null} />
         <CardStatus status={status} species={species} type={type} />
       </CardInfo>
     </StyledCard>
   );
 }
 
-export function CardTitle({ name, gender, className }) {
-  const Icon = (() => {
-    if (gender === 'Male') {
-      return <Male width={20} height={20} fill="#33b3c8" title="Male" />;
-    }
-
-    if (gender === 'Female') {
-      return <Female width={24} height={24} fill="pink" title="Female" />;
-    }
-
-    if (gender === 'unknown' || gender === 'Genderless') {
-      return (
-        <Genderless width={24} height={24} fill="#999" title="Genderless" />
-      );
-    }
-
-    return null;
-  })();
-
+export function CardTitle({ name, icon, className }) {
   return (
     <CardTitleContainer className={className}>
       <StyledCardTitle className="card-title">{name}</StyledCardTitle>
-
-      <IconContainer>{Icon}</IconContainer>
+      <IconContainer>{icon}</IconContainer>
     </CardTitleContainer>
   );
 }
@@ -141,6 +117,7 @@ const IconContainer = styled.div`
 
 const CardTitleContainer = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
   margin-bottom: 10px;
 `;
