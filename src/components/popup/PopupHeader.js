@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { CardStatus, CardTitle } from '../Card';
+import { genderIcons } from '../../shared/helpers/genders';
 
 export function PopupHeader({ image, name, gender, status, species, type }) {
   return (
     <PopupHeaderContainer>
       <PopupImage src={image?.replace('../', '')} alt={name} />
-      <PopupTitle name={name} gender={gender} />
+      <PopupTitle name={name} icon={genderIcons[gender] || null} />
       <PopupStatus status={status} species={species} type={type} />
     </PopupHeaderContainer>
   );
