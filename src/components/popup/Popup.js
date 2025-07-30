@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { PopupEpisodes } from './PopupEpisodes';
 import { PopupHeader } from './PopupHeader';
 import { PopupInfo } from './PopupInfo';
+import { useCallback } from 'react';
 
 export function Popup({ settings: { visible, content = {} }, setSettings }) {
   const {
@@ -16,19 +17,22 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
     episode: episodes
   } = content;
 
-  function togglePopup(e) {
-    if (e.currentTarget !== e.target) {
-      return;
-    }
-
-    setSettings((prevState) => ({
-      ...prevState,
-      visible: !prevState.visible
-    }));
-  }
+  const togglePopup = useCallback(
+    (e) => {
+      if (e.currentTarget === e.target) {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = `0px`;
+        setSettings((prev) => ({
+          ...prev,
+          visible: false
+        }));
+      }
+    },
+    [setSettings]
+  );
 
   return (
-    <PopupContainer visible={visible}>
+    <PopupContainer visible={visible} onClick={togglePopup}>
       <StyledPopup>
         <CloseIcon onClick={togglePopup} />
 
